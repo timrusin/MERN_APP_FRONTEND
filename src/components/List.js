@@ -5,22 +5,16 @@ import { useEffect, useState } from 'react';
 const List = () => {
   const url = "http://localhost:8000";
   const [user, setUser] = useState([]);
+
   useEffect(() => {
     fetch(url)
       .then((res) => res.json())
       .then((json) => setUser(json));
-  }, []);
+  }, [user]);
   console.log(user);
 
-  const handleClick = (event) => {
-    event.preventDefault();
-    const deleteUser = {
-      name: user.name,
-      email: user.email,
-    };
-
-    axios.delete("http://localhost:8000/api/users/", deleteUser);
-    console.log(user);
+    const handleClick = (id) => {
+        axios.delete(`http://localhost:8000/api/users/${id}`)
   };
   return (
     <div>
@@ -29,8 +23,9 @@ const List = () => {
           <div>
             <h1>{item.name}</h1>
             <h2>{item.email}</h2>
-            <button onClick={handleClick} className="btn btn-lg btn-info">
-              Delete User
+            <h6>{item._id}</h6>
+            <button onClick={() => handleClick(item._id)} className="btn btn-lg btn-info">
+              delete
             </button>
           </div>
         );
